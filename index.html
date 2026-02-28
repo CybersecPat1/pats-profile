@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Interface v2.0</title>
+    <style>
+    :root {
+        --neon-pink: #ff00ff;
+        --neon-blue: #00f2ff;
+        --glass: rgba(0, 15, 30, 0.7);
+        --border-glow: 0 0 15px rgba(0, 242, 255, 0.5);
+        --scanline-color: rgba(18, 16, 16, 0.1);
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Courier New', Courier, monospace;
+        color: var(--neon-blue);
+        background-color: black;
+        overflow-x: hidden;
+    }
+
+    /* Scanline Overlay */
+    body::before {
+        content: " ";
+        display: block;
+        position: fixed;
+        top: 0; left: 0; bottom: 0; right: 0;
+        background: linear-gradient(
+            var(--scanline-color) 50%, 
+            transparent 50%
+        );
+        background-size: 100% 4px; /* Adjust thickness here */
+        z-index: 10;
+        pointer-events: none; /* Allows clicking through to the UI */
+        opacity: 0.8;
+    }
+
+    /* Matrix Background */
+    #matrix {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: -2;
+    }
+
+    /* Centered Layout Container */
+    .container {
+        display: grid;
+        grid-template-areas: 
+            "header header"
+            "sidebar main"
+            "footer footer";
+        grid-template-columns: 280px 1fr;
+        grid-template-rows: auto 1fr auto;
+        
+        /* Centering Logic */
+        max-width: 1200px; 
+        margin: 0 auto; 
+        min-height: 100vh;
+        
+        gap: 25px;
+        padding: 40px 80px; 
+        box-sizing: border-box;
+        position: relative;
+        z-index: 5;
+    }
+
+    /* Pulsing Fire Columns */
+    .fire-column {
+        position: fixed;
+        top: 0;
+        width: 50px;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(to top, transparent, #ff4d00, #ffae00, transparent);
+        filter: blur(15px);
+        animation: firePulse 1.5s infinite alternate ease-in-out;
+    }
+    .fire-left { left: 0; }
+    .fire-right { right: 0; }
+
+    @keyframes firePulse {
+        from { opacity: 0.3; transform: scaleX(1); }
+        to { opacity: 0.8; transform: scaleX(1.8); }
+    }
+
+    /* Glass Boxes with Pulsing Borders */
+    .box {
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 2px solid rgba(0, 242, 255, 0.2);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: var(--border-glow);
+        animation: borderPulse 4s infinite alternate ease-in-out;
+    }
+
+    @keyframes borderPulse {
+        0% { 
+            box-shadow: 0 0 5px var(--neon-blue); 
+            border-color: rgba(0, 242, 255, 0.3); 
+        }
+        50% {
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.4);
+            border-color: rgba(255, 0, 255, 0.5);
+        }
+        100% { 
+            box-shadow: 0 0 15px var(--neon-blue); 
+            border-color: rgba(0, 242, 255, 0.6); 
+        }
+    }
+
+    header { grid-area: header; text-align: center; font-size: 2.5rem; letter-spacing: 8px; font-weight: 900; }
+    footer { grid-area: footer; text-align: center; opacity: 0.7; }
+    aside { grid-area: sidebar; }
+    main { grid-area: main; }
+
+    /* Links */
+    nav ul { list-style: none; padding: 0; }
+    nav li { margin: 20px 0; }
+    nav a {
+        color: var(--neon-blue);
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+    nav a:hover {
+        color: var(--neon-pink);
+        padding-left: 15px;
+        text-shadow: 0 0 10px var(--neon-pink);
+    }
+
+    h1, h2 { color: var(--neon-pink); text-shadow: 0 0 8px var(--neon-pink); margin-top: 0; }
+</style>
+</head>
+<body>
+
+    <canvas id="matrix"></canvas>
+
+    <div class="fire-column fire-left"></div>
+    <div class="fire-column fire-right"></div>
+
+    <div class="container">
+        <header class="box">
+            Pat's Profile
+        </header>
+
+        <aside class="box">
+            <h2>NAVIGATION</h2>
+            <nav>
+                <ul>
+                <li><a href="https://www.youtube.com/@CybersecPat" target="_blank">> YouTube Channel</a></li>
+                <li><a href="https://infosec.exchange/@CybersecPat" target="_blank">> Infosec.exchange</a></li>
+                <li><a href="https://patsprivate.email" target="_blank">> patsprivate.email</a></li>
+                <li><a href="#">> Cybersec Studios</a></li>
+                <li><a href="https://github.com/CybersecPat1" target="_blank">> GitHub</a></li>
+                <li><a href="https://cybersecpat1.github.io/pgp-howto/" target="_blank">> How to use PGP</a></li>
+            </ul>
+            </nav>
+        </aside>
+
+       <main class="box">
+            <h2>IDENTITY: <span class="highlight">Cybersec Pat</span></h2>
+            <p><strong>Status:</strong> Cybersecurity Engineer | Content Creator</p>
+            <hr style="border: 0.5px solid var(--neon-green);">
+            <p>Welcome to the node. I am a cloud security engineer specializing in <strong>OS hardening</strong>, <strong>Linux</strong>, and <strong>cloud security</strong>.</p>
+            
+            <h3>Core Competencies</h3>
+            <ul>
+                <li>Windows endpoint and server hardening</li>
+                <li>Services Orchestration (Ansible/Terraform/Docker)</li>
+                <li>Regulatory Compliance (HIPAA/NIST/PCI)</li>
+                <li>Zero Trust Architecture Implementation</li>
+            </ul>
+
+            <p> When I'm not auditing networks, I'm usually refining my YouTube content or experimenting with retro-inspired UI/UX designs. Living in the midwest US, my family enjoys the open space and the low cost of living.</p>
+
+            <p> Growing up I dreamed of becoming a system administrator. After having served in that role for several years, I transitioned into cybersecurity and have been passionate about it ever since.</p>
+            
+            <p> On the left hand side you will see a collection of links to my other sites. Please feel free to peruse them, and if you want to get in contant with me use the link "patsprivate.email".</p>
+            <p class="highlight">_End of Transmission</p>
+        </main>
+
+        <footer class="box">
+            &copy; 2026 Cyber Chronicles | CONNECTION: ENCRYPTED
+        </footer>
+    </div>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#0F0"; // Green text for classic Matrix look
+            ctx.font = fontSize + "px arial";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
